@@ -10,7 +10,7 @@
 ".\system_stm32f10x.o"
 ".\redirect_fput.o"
 ".\debug.o"
---strict --scatter ".\Getting_Started.sct"
+--strict --scatter ".\GPIO.sct"
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
---list ".\Getting_Started.map" -o .\Getting_Started.axf
+--list ".\GPIO.map" -o .\GPIO.axf
