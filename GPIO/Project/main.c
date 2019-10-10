@@ -76,11 +76,11 @@ int main (void)
 
 			while (1)
 			{
-				/* Toggle LED on PA0 */
-				GPIOA->ODR = (uint32_t)0x00;
-        		delay(150);
-        		GPIOA->ODR = (uint32_t)(1<<0);
-				delay(150);
+				delay(250);
+				if((GPIOA->IDR & (1<<1)) != 0)
+				{
+					printf("Button is pressed\n\r");
+				}
 			}
 }
 
