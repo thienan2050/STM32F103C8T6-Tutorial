@@ -53,17 +53,34 @@ int main (void)
 			GPIO_InitStruct.GPIO_Mode = GPIO_Mode_Out_PP;
 			GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-			DBG("The address of GPIO_InitTypeDef GPIO_InitStruc is stored in SRAM %p \n\r",&GPIO_InitStruct);
+			DBG("GPIO_InitTypeDef GPIO_InitStruc is stored in SRAM %p \n\r",&GPIO_InitStruct);
 			DBG("The address of GPIOC is %p \n\r",GPIOC);
+/**
+* Configure GPIOA
+* Pin0 as input
+* Pin1 as output
+*/
+			/* Configure P0 as push-pull output */
+			GPIO_InitStruct.GPIO_Pin = GPIO_Pin_0;
+			GPIO_InitStruct.GPIO_Speed = GPIO_Speed_2MHz;
+			GPIO_InitStruct.GPIO_Mode = GPIO_Mode_Out_PP;
+			GPIO_Init(GPIOA, &GPIO_InitStruct);
+			/* Configure P1 as input */
+			GPIO_InitStruct.GPIO_Pin = GPIO_Pin_1;
+			GPIO_InitStruct.GPIO_Speed = GPIO_Speed_2MHz;
+			GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IPD;
+			GPIO_Init(GPIOA, &GPIO_InitStruct);
+			
+
+			SysTick_Config(1000/1);
+
 			while (1)
 			{
-				/* Toggle LED on PC13 */
-				/* Reset bit will turn on LED (because the logic is interved).*/
-        		GPIO_ResetBits(GPIOC, GPIO_Pin_13);
-        		delay(1000);
-       	   	    /* Set bit will turn off LED (because the logic is interved).*/
-        		GPIO_SetBits(GPIOC, GPIO_Pin_13);
-				delay(1000);
+				/* Toggle LED on PA0 */
+				GPIOA->ODR = (uint32_t)0x00;
+        		delay(150);
+        		GPIOA->ODR = (uint32_t)(1<<0);
+				delay(150);
 			}
 }
 
