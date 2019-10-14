@@ -3,8 +3,6 @@
 .\stm32f10x_gpio.o: C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include\stm32f10x.h
 .\stm32f10x_gpio.o: ..\..\Lib\CMSIS\CM3\CoreSupport\core_cm3.h
 .\stm32f10x_gpio.o: C:\Keil_v5\ARM\ARMCC\bin\..\include\stdint.h
-.\stm32f10x_gpio.o: ..\..\Project\debug.h
-.\stm32f10x_gpio.o: C:\Keil_v5\ARM\ARMCC\bin\..\include\stdio.h
 .\stm32f10x_gpio.o: C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include\system_stm32f10x.h
 .\stm32f10x_gpio.o: ..\..\Project\stm32f10x_conf.h
 .\stm32f10x_gpio.o: ..\..\Lib\STM32F10x_StdPeriph_Driver\inc\stm32f10x_adc.h
@@ -31,3 +29,5 @@
 .\stm32f10x_gpio.o: ..\..\Lib\STM32F10x_StdPeriph_Driver\inc\stm32f10x_usart.h
 .\stm32f10x_gpio.o: ..\..\Lib\STM32F10x_StdPeriph_Driver\inc\stm32f10x_wwdg.h
 .\stm32f10x_gpio.o: ..\..\Lib\STM32F10x_StdPeriph_Driver\inc\misc.h
+.\stm32f10x_gpio.o: ..\..\Project\debug.h
+.\stm32f10x_gpio.o: C:\Keil_v5\ARM\ARMCC\bin\..\include\stdio.h

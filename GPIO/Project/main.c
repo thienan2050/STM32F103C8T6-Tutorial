@@ -61,23 +61,22 @@ int main (void)
 * Pin1 as output
 */
 			/* Configure P0 as push-pull output */
-			GPIO_InitStruct.GPIO_Pin = GPIO_Pin_0;
+			GPIO_InitStruct.GPIO_Pin = GPIO_Pin_1;
 			GPIO_InitStruct.GPIO_Speed = GPIO_Speed_2MHz;
 			GPIO_InitStruct.GPIO_Mode = GPIO_Mode_Out_PP;
 			GPIO_Init(GPIOA, &GPIO_InitStruct);
 			/* Configure P1 as input */
-			GPIO_InitStruct.GPIO_Pin = GPIO_Pin_1;
+			GPIO_InitStruct.GPIO_Pin = GPIO_Pin_5;
 			GPIO_InitStruct.GPIO_Speed = GPIO_Speed_2MHz;
 			GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IPD;
 			GPIO_Init(GPIOA, &GPIO_InitStruct);
 			
 
-			//SysTick_Config(1000/1);
-
 			while (1)
 			{
 				delay(200);
-				if((GPIOA->IDR & (1<<1)) != 0)
+				//Display_Binary(GPIOA->IDR);
+				if((GPIOA->IDR & (1<<5)) != 0)
 				{
 					printf("Button is pressed\n\r");
 				}
