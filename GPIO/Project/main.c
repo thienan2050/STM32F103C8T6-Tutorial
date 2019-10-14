@@ -8,7 +8,7 @@
 
 GPIO_InitTypeDef GPIO_InitStruct;
 USART_InitTypeDef UART_InitStruct;
-
+__IO uint32_t ui32gSystick;
 
 int main (void)
 {
@@ -72,11 +72,11 @@ int main (void)
 			GPIO_Init(GPIOA, &GPIO_InitStruct);
 			
 
-			SysTick_Config(1000/1);
+			//SysTick_Config(1000/1);
 
 			while (1)
 			{
-				delay(250);
+				delay(200);
 				if((GPIOA->IDR & (1<<1)) != 0)
 				{
 					printf("Button is pressed\n\r");

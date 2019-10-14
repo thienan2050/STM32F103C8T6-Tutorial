@@ -23,7 +23,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h"
-
+#include "debug.h"
+extern __IO uint32_t ui32gSystick;
+uint32_t i;
 /** @addtogroup STM32F10x_StdPeriph_Template
   * @{
   */
@@ -134,6 +136,12 @@ void PendSV_Handler(void)
   */
 void SysTick_Handler(void)
 {
+	ui32gSystick++;
+	if(ui32gSystick == 1000)
+	{
+		ui32gSystick = 0;
+		DBG("Time's up [%d] \n\r", i++);
+	}
 }
 
 /******************************************************************************/

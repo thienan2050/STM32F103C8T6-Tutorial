@@ -2,6 +2,8 @@
 .\system_stm32f10x.o: C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include\stm32f10x.h
 .\system_stm32f10x.o: ..\..\Lib\CMSIS\CM3\CoreSupport\core_cm3.h
 .\system_stm32f10x.o: C:\Keil_v5\ARM\ARMCC\bin\..\include\stdint.h
+.\system_stm32f10x.o: ..\..\Project\debug.h
+.\system_stm32f10x.o: C:\Keil_v5\ARM\ARMCC\bin\..\include\stdio.h
 .\system_stm32f10x.o: C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include\system_stm32f10x.h
 .\system_stm32f10x.o: ..\..\Project\stm32f10x_conf.h
 .\system_stm32f10x.o: ..\..\Lib\STM32F10x_StdPeriph_Driver\inc\stm32f10x_adc.h
