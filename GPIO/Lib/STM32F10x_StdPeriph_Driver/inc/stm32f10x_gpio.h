@@ -285,14 +285,17 @@ typedef enum
 #define GPIO_PinSource1            ((uint8_t)0x01)
 #define GPIO_PinSource2            ((uint8_t)0x02)
 #define GPIO_PinSource3            ((uint8_t)0x03)
+
 #define GPIO_PinSource4            ((uint8_t)0x04)
 #define GPIO_PinSource5            ((uint8_t)0x05)
 #define GPIO_PinSource6            ((uint8_t)0x06)
 #define GPIO_PinSource7            ((uint8_t)0x07)
+
 #define GPIO_PinSource8            ((uint8_t)0x08)
 #define GPIO_PinSource9            ((uint8_t)0x09)
 #define GPIO_PinSource10           ((uint8_t)0x0A)
 #define GPIO_PinSource11           ((uint8_t)0x0B)
+
 #define GPIO_PinSource12           ((uint8_t)0x0C)
 #define GPIO_PinSource13           ((uint8_t)0x0D)
 #define GPIO_PinSource14           ((uint8_t)0x0E)
@@ -364,6 +367,7 @@ void GPIO_EventOutputConfig(uint8_t GPIO_PortSource, uint8_t GPIO_PinSource);
 void GPIO_EventOutputCmd(FunctionalState NewState);
 void GPIO_PinRemapConfig(uint32_t GPIO_Remap, FunctionalState NewState);
 void GPIO_EXTILineConfig(uint8_t GPIO_PortSource, uint8_t GPIO_PinSource);
+void GPIO_EXTILineConfig_V2(uint8_t GPIO_PortSource, uint8_t GPIO_PinSource);
 void GPIO_ETH_MediaInterfaceConfig(uint32_t GPIO_ETH_MediaInterface);
 
 #ifdef __cplusplus

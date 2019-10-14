@@ -625,9 +625,24 @@ void GPIO_EXTILineConfig(uint8_t GPIO_PortSource, uint8_t GPIO_PinSource)
   assert_param(IS_GPIO_EXTI_PORT_SOURCE(GPIO_PortSource));
   assert_param(IS_GPIO_PIN_SOURCE(GPIO_PinSource));
   
+  /* Detect the position of 4 bits which must be configured */
   tmp = ((uint32_t)0x0F) << (0x04 * (GPIO_PinSource & (uint8_t)0x03));
+  //printf("%d = ",tmp);
+  //Display_Binary(tmp);
+  /* Only change 4 bits which must be configured, other bits needn't change */
   AFIO->EXTICR[GPIO_PinSource >> 0x02] &= ~tmp;
+  /* Change 4 bits */
   AFIO->EXTICR[GPIO_PinSource >> 0x02] |= (((uint32_t)GPIO_PortSource) << (0x04 * (GPIO_PinSource & (uint8_t)0x03)));
+}
+
+void GPIO_EXTILineConfig_V2(uint8_t GPIO_PortSource, uint8_t GPIO_PinSource)
+{
+	/* Check the parameters */
+	assert_param(IS_GPIO_EXTI_PORT_SOURCE(GPIO_PortSource));
+	assert_param(IS_GPIO_PIN_SOURCE(GPIO_PinSource));
+	AFIO->EXTICR[GPIO_PinSource >> 0x02] = ((uint32_t)GPIO_PortSource) << ((GPIO_PinSource & (uint8_t)0x03) * 0x04);
+	printf("EXTICR[%d] = ", GPIO_PinSource >> 0x02);
+	Display_Binary(((uint32_t)GPIO_PortSource) << ((GPIO_PinSource & (uint8_t)0x03) * 0x04));
 }
 
 /**
