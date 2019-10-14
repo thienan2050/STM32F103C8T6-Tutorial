@@ -72,7 +72,6 @@ int main (void)
 			GPIO_Init(GPIOA, &GPIO_InitStruct);
 			
 
-			SysTick_Config(1000/1);
 
 			while (1)
 			{
