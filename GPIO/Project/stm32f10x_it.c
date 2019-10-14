@@ -38,7 +38,7 @@
 /******************************************************************************/
 /*            Cortex-M3 Processor Exceptions Handlers                         */
 /******************************************************************************/
-void EXTI15_10_IRQHandler(void)
+void EXTI9_5_IRQHandler(void)
 {
 if(EXTI_GetITStatus(EXTI_Line5) != RESET)
 	{

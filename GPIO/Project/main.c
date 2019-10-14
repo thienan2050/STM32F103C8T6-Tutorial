@@ -67,20 +67,24 @@ int main (void)
 			GPIO_InitStruct.GPIO_Speed = GPIO_Speed_2MHz;
 			GPIO_InitStruct.GPIO_Mode = GPIO_Mode_Out_PP;
 			GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+
+/**
+ * Configure Interrupt on PA5
+ *
+*/
 			/* Configure P1 as input */
-			GPIO_InitStruct.GPIO_Pin = GPIO_Pin_4;
+			GPIO_InitStruct.GPIO_Pin = GPIO_Pin_5;
 			GPIO_InitStruct.GPIO_Speed = GPIO_Speed_2MHz;
 			GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IPD;
 			GPIO_Init(GPIOA, &GPIO_InitStruct);
-			
-/**
- * Configure Interrupt on PA0
- *
-*/
+			/* Mapping */
 			GPIO_EXTILineConfig(GPIO_PortSourceGPIOA, GPIO_PinSource5);
+			/* Clear the the EXTI line interrupt pending bit */
 			EXTI_ClearITPendingBit(EXTI_Line5);
+
 			EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
-			EXTI_InitStructure.EXTI_Line = EXTI_Line0;
+			EXTI_InitStructure.EXTI_Line = EXTI_Line5;
 			EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;
 			EXTI_InitStructure.EXTI_LineCmd = ENABLE;
 			EXTI_Init(&EXTI_InitStructure);
@@ -94,11 +98,11 @@ int main (void)
 
 			while (1)
 			{
-				delay(200);
-				if((GPIOA->IDR & (1<<4)) != 0)
-				{
-					printf("Button is pressed\n\r");
-				}
+				//delay(200);
+				//if((GPIOA->IDR & (1<<5)) != 0)
+				//{
+				//	printf("Button is pressed\n\r");
+				//}
 			}
 }
 
