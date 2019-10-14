@@ -3,12 +3,14 @@
 #include "stm32f10x_gpio.h"
 #include "stm32f10x_usart.h"
 #include "stm32f10x_rcc.h"
-
+#include "stm32f10x_exti.h"
+#include "misc.h"
 #include "debug.h"
 
 GPIO_InitTypeDef GPIO_InitStruct;
 USART_InitTypeDef UART_InitStruct;
-
+EXTI_InitTypeDef EXTI_InitStructure;
+NVIC_InitTypeDef NVIC_InitStructure;
 
 int main (void)
 {
@@ -66,20 +68,37 @@ int main (void)
 			GPIO_InitStruct.GPIO_Mode = GPIO_Mode_Out_PP;
 			GPIO_Init(GPIOA, &GPIO_InitStruct);
 			/* Configure P1 as input */
-			GPIO_InitStruct.GPIO_Pin = GPIO_Pin_1;
+			GPIO_InitStruct.GPIO_Pin = GPIO_Pin_4;
 			GPIO_InitStruct.GPIO_Speed = GPIO_Speed_2MHz;
 			GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IPD;
 			GPIO_Init(GPIOA, &GPIO_InitStruct);
 			
+/**
+ * Configure Interrupt on PA0
+ *
+*/
+			GPIO_EXTILineConfig(GPIO_PortSourceGPIOA, GPIO_PinSource5);
+			EXTI_ClearITPendingBit(EXTI_Line5);
+			EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+			EXTI_InitStructure.EXTI_Line = EXTI_Line0;
+			EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;
+			EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+			EXTI_Init(&EXTI_InitStructure);
 
+			/*NVIC Configuration*/
+			NVIC_InitStructure.NVIC_IRQChannel = EXTI9_5_IRQn;
+			NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+			NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+			NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+			NVIC_Init(&NVIC_InitStructure);
 
 			while (1)
 			{
-				/* Toggle LED on PA0 */
-				GPIOA->ODR = (uint32_t)0x00;
-        		delay(150);
-        		GPIOA->ODR = (uint32_t)(1<<0);
-				delay(150);
+				delay(200);
+				if((GPIOA->IDR & (1<<4)) != 0)
+				{
+					printf("Button is pressed\n\r");
+				}
 			}
 }
 

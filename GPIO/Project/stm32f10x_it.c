@@ -23,7 +23,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h"
-
+#include "stm32f10x_exti.h"
 /** @addtogroup STM32F10x_StdPeriph_Template
   * @{
   */
@@ -38,6 +38,16 @@
 /******************************************************************************/
 /*            Cortex-M3 Processor Exceptions Handlers                         */
 /******************************************************************************/
+void EXTI15_10_IRQHandler(void)
+{
+if(EXTI_GetITStatus(EXTI_Line5) != RESET)
+	{
+	/* Clear the EXTI line pending bit */
+	EXTI_ClearITPendingBit(EXTI_Line5);
+	// dao trang thai led moi lan co canh xuong
+	printf("Interrupt happened \n\r");
+	}
+}
 
 /**
   * @brief  This function handles NMI exception.
