@@ -80,8 +80,7 @@ int main (void)
 			GPIO_Init(GPIOA, &GPIO_InitStruct);
 			/* Mapping */
 			GPIO_EXTILineConfig(GPIO_PortSourceGPIOA, GPIO_PinSource5);
-			/* Clear the the EXTI line interrupt pending bit */
-			EXTI_ClearITPendingBit(EXTI_Line5);
+
 
 			EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
 			EXTI_InitStructure.EXTI_Line = EXTI_Line5;
@@ -98,11 +97,11 @@ int main (void)
 
 			while (1)
 			{
-				//delay(200);
-				//if((GPIOA->IDR & (1<<5)) != 0)
-				//{
-				//	printf("Button is pressed\n\r");
-				//}
+				/* Toggle LED on PA0 */
+				GPIOA->ODR = (uint32_t)0x00;
+        		delay(150);
+        		GPIOA->ODR = (uint32_t)(1<<0);
+				delay(150);
 			}
 }
 
