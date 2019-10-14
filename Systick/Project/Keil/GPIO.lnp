@@ -1,0 +1,16 @@
+--cpu Cortex-M3
+".\core_cm3.o"
+".\startup_stm32f10x_md.o"
+".\misc.o"
+".\stm32f10x_gpio.o"
+".\stm32f10x_rcc.o"
+".\stm32f10x_usart.o"
+".\main.o"
+".\stm32f10x_it.o"
+".\system_stm32f10x.o"
+".\redirect_fput.o"
+".\debug.o"
+--strict --scatter ".\GPIO.sct"
+--summary_stderr --info summarysizes --map --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list ".\GPIO.map" -o .\GPIO.axf
