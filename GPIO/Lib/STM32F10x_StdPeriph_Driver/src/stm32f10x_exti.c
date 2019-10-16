@@ -21,7 +21,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_exti.h"
-
+#include "debug.h"
 /** @addtogroup STM32F10x_StdPeriph_Driver
   * @{
   */
@@ -229,6 +229,7 @@ ITStatus EXTI_GetITStatus(uint32_t EXTI_Line)
   assert_param(IS_GET_EXTI_LINE(EXTI_Line));
   
   enablestatus =  EXTI->IMR & EXTI_Line;
+  //Display_Binary(EXTI->IMR);
   if (((EXTI->PR & EXTI_Line) != (uint32_t)RESET) && (enablestatus != (uint32_t)RESET))
   {
     bitstatus = SET;

@@ -28,7 +28,7 @@ void printBinary(int value)
 		else
 			printf("0");
 	}
-	printf("\n");
+	printf("\n\r");
 }
 
 

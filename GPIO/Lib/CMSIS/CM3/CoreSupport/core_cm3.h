@@ -1585,10 +1585,27 @@ static __INLINE uint32_t NVIC_GetActive(IRQn_Type IRQn)
  */
 static __INLINE void NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority)
 {
-  if(IRQn < 0) {
-    SCB->SHP[((uint32_t)(IRQn) & 0xF)-4] = ((priority << (8 - __NVIC_PRIO_BITS)) & 0xff); } /* set Priority for Cortex-M3 System Interrupts */
-  else {
-    NVIC->IP[(uint32_t)(IRQn)] = ((priority << (8 - __NVIC_PRIO_BITS)) & 0xff);    }        /* set Priority for device specific Interrupts  */
+  /* Negative IRQns specify core interrupt including:
+   * + NonMaskableInt_IRQn
+   * + MemoryManagement_IRQn
+   * + BusFault_IRQn
+   * + UsageFault_IRQn
+   * + SVCall_IRQn
+   * + DebugMonitor_IRQn
+   * + PenSV_IRQn
+   * + Systick_IRQn
+   */
+  if(IRQn < 0)
+  {
+	/* set Priority for Cortex-M3 System Interrupts */
+    SCB->SHP[((uint32_t)(IRQn) & 0xF)-4] = ((priority << (8 - __NVIC_PRIO_BITS)) & 0xff);
+  }
+  else
+  /* Positive to specify an external (device specific) */
+  {
+	/* set Priority for device specific Interrupts  */
+    NVIC->IP[(uint32_t)(IRQn)] = ((priority << (8 - __NVIC_PRIO_BITS)) & 0xff);
+  }
 }
 
 /**

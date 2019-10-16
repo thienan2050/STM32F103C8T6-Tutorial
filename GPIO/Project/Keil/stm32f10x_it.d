@@ -29,3 +29,5 @@
 .\stm32f10x_it.o: ..\..\Lib\STM32F10x_StdPeriph_Driver\inc\stm32f10x_usart.h
 .\stm32f10x_it.o: ..\..\Lib\STM32F10x_StdPeriph_Driver\inc\stm32f10x_wwdg.h
 .\stm32f10x_it.o: ..\..\Lib\STM32F10x_StdPeriph_Driver\inc\misc.h
+.\stm32f10x_it.o: ..\debug.h
+.\stm32f10x_it.o: C:\Keil_v5\ARM\ARMCC\bin\..\include\stdio.h

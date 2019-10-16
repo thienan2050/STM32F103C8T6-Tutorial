@@ -24,6 +24,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h"
 #include "stm32f10x_exti.h"
+#include "stm32f10x_usart.h"
+#include "debug.h"
 /** @addtogroup STM32F10x_StdPeriph_Template
   * @{
   */
@@ -32,6 +34,8 @@
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
+extern __IO uint32_t ui32gSystick;
+uint32_t i;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -40,14 +44,27 @@
 /******************************************************************************/
 void EXTI9_5_IRQHandler(void)
 {
-if(EXTI_GetITStatus(EXTI_Line5) != RESET)
+	if(EXTI_GetITStatus(EXTI_Line5) == SET)
 	{
-	/* Clear the EXTI line pending bit */
-	EXTI_ClearITPendingBit(EXTI_Line5);
-	// dao trang thai led moi lan co canh xuong
-	printf("Interrupt happened \n\r");
+		/* Clear the EXTI line pending bit */
+		EXTI_ClearITPendingBit(EXTI_Line5);
+		/* Notice */
+		printf("EXTI_Line5 \n\r");
 	}
 }
+
+void EXTI4_IRQHandler(void)
+{
+	if(EXTI_GetITStatus(EXTI_Line4) == SET)
+	{
+		/* Clear the EXTI line pending bit */
+		EXTI_ClearITPendingBit(EXTI_Line4);
+		/* Notice */
+		printf("EXTI_Line4 \n\r");
+	}
+}
+
+
 
 /**
   * @brief  This function handles NMI exception.
@@ -144,6 +161,12 @@ void PendSV_Handler(void)
   */
 void SysTick_Handler(void)
 {
+	ui32gSystick++;
+	if(ui32gSystick == 1000)
+	{
+		ui32gSystick = 0;
+		printf("Systick interrupt [%d] \n\r", i++);
+	}
 }
 
 /******************************************************************************/

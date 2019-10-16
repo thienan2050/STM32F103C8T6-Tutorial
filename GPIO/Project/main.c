@@ -5,17 +5,18 @@
 #include "stm32f10x_rcc.h"
 #include "stm32f10x_exti.h"
 #include "misc.h"
+#include "core_cm3.h"
 #include "debug.h"
 
 GPIO_InitTypeDef GPIO_InitStruct;
 USART_InitTypeDef UART_InitStruct;
 EXTI_InitTypeDef EXTI_InitStructure;
 NVIC_InitTypeDef NVIC_InitStructure;
-
+__IO uint32_t ui32gSystick = 0;
 int main (void)
 {
 /**
- * Configure USART2
+ * Configure USART2 for debugging
  * GPIO_Pin_2 TX
  * GPIO_Pin_3 RX
  * BaudRate = 115200
@@ -55,8 +56,8 @@ int main (void)
 			GPIO_InitStruct.GPIO_Mode = GPIO_Mode_Out_PP;
 			GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-			DBG("GPIO_InitTypeDef GPIO_InitStruc is stored in SRAM %p \n\r",&GPIO_InitStruct);
-			DBG("The address of GPIOC is %p \n\r",GPIOC);
+			//DBG("GPIO_InitTypeDef GPIO_InitStruc is stored in SRAM %p \n\r",&GPIO_InitStruct);
+			//DBG("The address of GPIOC is %p \n\r",GPIOC);
 /**
 * Configure GPIOA
 * Pin0 as input
@@ -95,13 +96,45 @@ int main (void)
 			NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 			NVIC_Init(&NVIC_InitStructure);
 
+/**
+* Configure Interrupt on PA4
+*
+*/
+			/* Configure P4 as input */
+			GPIO_InitStruct.GPIO_Pin = GPIO_Pin_4;
+			GPIO_InitStruct.GPIO_Speed = GPIO_Speed_2MHz;
+			GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IPD;
+			GPIO_Init(GPIOA, &GPIO_InitStruct);
+			/* Mapping */
+			GPIO_EXTILineConfig(GPIO_PortSourceGPIOA, GPIO_PinSource4);
+
+
+			EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+			EXTI_InitStructure.EXTI_Line = EXTI_Line4;
+			EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;
+			EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+			EXTI_Init(&EXTI_InitStructure);
+
+			/*NVIC Configuration*/
+			NVIC_InitStructure.NVIC_IRQChannel = EXTI4_IRQn;
+			NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+			NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+			NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+			NVIC_Init(&NVIC_InitStructure);
+
+			SysTick_Config(SystemCoreClock / 1000);
+
 			while (1)
 			{
 				/* Toggle LED on PA0 */
 				GPIOA->ODR = (uint32_t)0x00;
-        		delay(150);
+				while(ui32gSystick != 999);
         		GPIOA->ODR = (uint32_t)(1<<0);
-				delay(150);
+        		while(ui32gSystick != 999);
+				//while(ui32gSystick != 999);
+				EXTI->SWIER |= (uint32_t)EXTI_Line5;
+				EXTI->SWIER |= (uint32_t)EXTI_Line4;
+
 			}
 }
 
