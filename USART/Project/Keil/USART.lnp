@@ -12,7 +12,7 @@
 ".\debug.o"
 ".\fifo.o"
 ".\stm32f10x_exti.o"
---strict --scatter ".\UASRT.sct"
+--strict --scatter ".\USART.sct"
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
---list ".\UASRT.map" -o .\UASRT.axf
+--list ".\USART.map" -o .\USART.axf
