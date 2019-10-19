@@ -1,0 +1,44 @@
+Dependencies for Project 'EEPROM_Emulation', Target 'STM3210C-EVAL': (DO NOT MODIFY !)
+F (..\src\eeprom.c)(0x4A77FEA0)(-c --cpu Cortex-M3 -D__MICROLIB -g -O3 --apcs=interwork --split_sections --asm --interleave --asm_dir ".\\List\\" -I..\inc -I..\..\..\Libraries\CMSIS\Core\CM3 -I..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc-I C:\Keil_v5\ARM\RV31\INC-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-DSTM32F10X_MD -DUSE_STM3210C_EVAL -DUSE_STDPERIPH_DRIVER -DSTM32F10X_CL -o .\obj\eeprom.o --list_dir ".\\List\\" --list --omf_browse .\obj\eeprom.crf --depend .\obj\eeprom.d)
+I (..\inc\eeprom.h)(0x4A77FEA0)
+I (..\..\..\Libraries\CMSIS\Core\CM3\stm32f10x.h)(0x4A77FE9E)
+I (..\..\..\Libraries\CMSIS\Core\CM3\core_cm3.h)(0x4A77FE9E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x52FDE08E)
+I (..\..\..\Libraries\CMSIS\Core\CM3\system_stm32f10x.h)(0x4A77FE9E)
+I (..\inc\stm32f10x_conf.h)(0x4A77FEA0)
+I (..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_flash.h)(0x4A77FEA0)
+F (..\src\main.c)(0x4A77FEA0)(-c --cpu Cortex-M3 -D__MICROLIB -g -O3 --apcs=interwork --split_sections --asm --interleave --asm_dir ".\\List\\" -I..\inc -I..\..\..\Libraries\CMSIS\Core\CM3 -I..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc-I C:\Keil_v5\ARM\RV31\INC-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-DSTM32F10X_MD -DUSE_STM3210C_EVAL -DUSE_STDPERIPH_DRIVER -DSTM32F10X_CL -o .\obj\main.o --list_dir ".\\List\\" --list --omf_browse .\obj\main.crf --depend .\obj\main.d)
+I (..\inc\eeprom.h)(0x4A77FEA0)
+I (..\..\..\Libraries\CMSIS\Core\CM3\stm32f10x.h)(0x4A77FE9E)
+I (..\..\..\Libraries\CMSIS\Core\CM3\core_cm3.h)(0x4A77FE9E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x52FDE08E)
+I (..\..\..\Libraries\CMSIS\Core\CM3\system_stm32f10x.h)(0x4A77FE9E)
+I (..\inc\stm32f10x_conf.h)(0x4A77FEA0)
+I (..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_flash.h)(0x4A77FEA0)
+F (..\src\stm32f10x_it.c)(0x4A77FEA0)(-c --cpu Cortex-M3 -D__MICROLIB -g -O3 --apcs=interwork --split_sections --asm --interleave --asm_dir ".\\List\\" -I..\inc -I..\..\..\Libraries\CMSIS\Core\CM3 -I..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc-I C:\Keil_v5\ARM\RV31\INC-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-DSTM32F10X_MD -DUSE_STM3210C_EVAL -DUSE_STDPERIPH_DRIVER -DSTM32F10X_CL -o .\obj\stm32f10x_it.o --list_dir ".\\List\\" --list --omf_browse .\obj\stm32f10x_it.crf --depend .\obj\stm32f10x_it.d)
+I (..\inc\stm32f10x_it.h)(0x4A77FEA0)
+I (..\..\..\Libraries\CMSIS\Core\CM3\stm32f10x.h)(0x4A77FE9E)
+I (..\..\..\Libraries\CMSIS\Core\CM3\core_cm3.h)(0x4A77FE9E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x52FDE08E)
+I (..\..\..\Libraries\CMSIS\Core\CM3\system_stm32f10x.h)(0x4A77FE9E)
+I (..\inc\stm32f10x_conf.h)(0x4A77FEA0)
+I (..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_flash.h)(0x4A77FEA0)
+F (..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_flash.c)(0x4A77FEA0)(-c --cpu Cortex-M3 -D__MICROLIB -g -O3 --apcs=interwork --split_sections --asm --interleave --asm_dir ".\\List\\" -I..\inc -I..\..\..\Libraries\CMSIS\Core\CM3 -I..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc-I C:\Keil_v5\ARM\RV31\INC-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-DSTM32F10X_MD -DUSE_STM3210C_EVAL -DUSE_STDPERIPH_DRIVER -DSTM32F10X_CL -o .\obj\stm32f10x_flash.o --list_dir ".\\List\\" --list --omf_browse .\obj\stm32f10x_flash.crf --depend .\obj\stm32f10x_flash.d)
+I (..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_flash.h)(0x4A77FEA0)
+I (..\..\..\Libraries\CMSIS\Core\CM3\stm32f10x.h)(0x4A77FE9E)
+I (..\..\..\Libraries\CMSIS\Core\CM3\core_cm3.h)(0x4A77FE9E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x52FDE08E)
+I (..\..\..\Libraries\CMSIS\Core\CM3\system_stm32f10x.h)(0x4A77FE9E)
+I (..\inc\stm32f10x_conf.h)(0x4A77FEA0)
+F (..\..\..\Libraries\CMSIS\Core\CM3\startup\arm\startup_stm32f10x_cl.s)(0x4A77FE9E)(--cpu Cortex-M3 -g --apcs=interwork --pd "__MICROLIB SETA 1"-I C:\Keil_v5\ARM\RV31\INC-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include--list .\list\startup_stm32f10x_cl.lst --xref -o .\obj\startup_stm32f10x_cl.o --depend .\obj\startup_stm32f10x_cl.d)
+F (..\..\..\Libraries\CMSIS\Core\CM3\startup\arm\startup_stm32f10x_hd.s)(0x4A77FE9E)()
+F (..\..\..\Libraries\CMSIS\Core\CM3\startup\arm\startup_stm32f10x_md.s)(0x4A77FE9E)()
+F (..\..\..\Libraries\CMSIS\Core\CM3\startup\arm\startup_stm32f10x_ld.s)(0x4A77FE9E)()
+F (..\readme.txt)(0x4A77FEA0)()
+F (..\..\..\Libraries\CMSIS\Core\CM3\system_stm32f10x.c)(0x4A77FE9E)(-c --cpu Cortex-M3 -D__MICROLIB -g -O3 --apcs=interwork --split_sections --asm --interleave --asm_dir ".\\List\\" -I..\inc -I..\..\..\Libraries\CMSIS\Core\CM3 -I..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc-I C:\Keil_v5\ARM\RV31\INC-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-DSTM32F10X_MD -DUSE_STM3210C_EVAL -DUSE_STDPERIPH_DRIVER -DSTM32F10X_CL -o .\obj\system_stm32f10x.o --list_dir ".\\List\\" --list --omf_browse .\obj\system_stm32f10x.crf --depend .\obj\system_stm32f10x.d)
+I (..\..\..\Libraries\CMSIS\Core\CM3\stm32f10x.h)(0x4A77FE9E)
+I (..\..\..\Libraries\CMSIS\Core\CM3\core_cm3.h)(0x4A77FE9E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x52FDE08E)
+I (..\..\..\Libraries\CMSIS\Core\CM3\system_stm32f10x.h)(0x4A77FE9E)
+I (..\inc\stm32f10x_conf.h)(0x4A77FEA0)
+I (..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_flash.h)(0x4A77FEA0)
