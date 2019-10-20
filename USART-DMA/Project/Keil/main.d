@@ -34,3 +34,4 @@
 .\main.o: C:\Keil_v5\ARM\ARMCC\bin\..\include\stdbool.h
 .\main.o: ..\debug.h
 .\main.o: C:\Keil_v5\ARM\ARMCC\bin\..\include\stdio.h
+.\main.o: ..\function.h

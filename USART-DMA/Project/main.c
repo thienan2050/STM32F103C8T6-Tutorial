@@ -4,25 +4,31 @@
 #include "stm32f10x_usart.h"
 #include "stm32f10x_rcc.h"
 #include "stm32f10x_exti.h"
+#include "stm32f10x_dma.h"
 #include "misc.h"
 #include "core_cm3.h"
 #include "FIFO.h"
+#include "function.h"
 #include "debug.h"
 
 GPIO_InitTypeDef GPIO_InitStruct;
 USART_InitTypeDef UART_InitStruct;
 EXTI_InitTypeDef EXTI_InitStructure;
 NVIC_InitTypeDef NVIC_InitStructure;
+DMA_InitTypeDef g_DMA_InitStructure_st;
+
+
+
 __IO uint32_t e_Systick_ui32 = 0;
 fifo_t e_BUFFER_ui8;
-uint32_t j;
-
-void *g_ui32Test;
-
-
-uint8_t get_buffer(uint8_t arr[]);
-void Delay_ms(uint32_t ms);
+uint32_t j, m;
 uint8_t array[4];
+uint32_t g_CurrentTick_ui32;
+uint32_t g_Source_ui32[800];
+uint32_t g_Destination_ui32[800];
+uint8_t e_DMA_Flag_ui8 = 0;
+
+
 int main (void)
 {
 /**
@@ -179,8 +185,47 @@ int main (void)
 				printf("Cannot create e_BUFFER_ui8 \n\r");
 			}
 
-#define COUNTER (*((volatile unsigned long *)0xE000E018))
-			printf("%d \n\r", COUNTER);
+/**
+* Configure DMA
+*/
+			for(m = 0; m < 800; m++)
+			{
+				g_Source_ui32[m] = m;
+			}
+
+			/* Enable clock for DMA1 */
+			RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);
+			/* Reset DMA1 channel */
+			DMA_DeInit(DMA1_Channel1);
+			g_DMA_InitStructure_st.DMA_PeripheralBaseAddr = (uint32_t)g_Source_ui32;
+			g_DMA_InitStructure_st.DMA_MemoryBaseAddr = (uint32_t)g_Destination_ui32;
+			g_DMA_InitStructure_st.DMA_DIR = DMA_DIR_PeripheralSRC;
+			g_DMA_InitStructure_st.DMA_BufferSize = 800;
+			g_DMA_InitStructure_st.DMA_PeripheralInc = DMA_PeripheralInc_Enable;
+			g_DMA_InitStructure_st.DMA_MemoryInc = DMA_MemoryInc_Enable;
+			g_DMA_InitStructure_st.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Word;
+			g_DMA_InitStructure_st.DMA_MemoryDataSize = DMA_MemoryDataSize_Word;
+			g_DMA_InitStructure_st.DMA_Mode = DMA_Mode_Normal;
+			g_DMA_InitStructure_st.DMA_Priority = DMA_Priority_Medium;
+			g_DMA_InitStructure_st.DMA_M2M = DMA_M2M_Disable;
+
+			DMA1_Channel1->CNDTR
+			DMA_Init(DMA1_Channel1, &g_DMA_InitStructure_st);
+			DMA_ITConfig(DMA1_Channel1, DMA_IT_TC, ENABLE);
+
+			/* Enable DMA1 channel IRQ Channel */
+			NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel1_IRQn;
+			NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+			NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+			NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+			NVIC_Init(&NVIC_InitStructure);
+
+			DMA_Cmd(DMA1_Channel1, ENABLE);
+
+
+			while(e_DMA_Flag_ui8 == 0);
+			printf("%d\n\r", g_Destination_ui32[100]);
+
 			/* Frame data ID|H_DATA|L_DATA|\n */
 			while (1)
 			{
@@ -191,10 +236,13 @@ int main (void)
         		GPIOA->ODR = (uint32_t)(1<<0);
         		Delay_ms(1000);
         		/* Generate Software Interrupt on Line5 */
-				EXTI->SWIER |= (uint32_t)EXTI_Line5;
+				//EXTI->SWIER |= (uint32_t)EXTI_Line5;
         		/* Generate Software Interrupt on Line4 */
-				EXTI->SWIER |= (uint32_t)EXTI_Line4;
+				//EXTI->SWIER |= (uint32_t)EXTI_Line4;
 
+        		DMA_Cmd(DMA1_Channel1, DISABLE);
+        		g_Source_ui32[100] = ++m;
+        		DMA_Cmd(DMA1_Channel1, ENABLE);
         		if(get_buffer(array) == 1)
         		{
         			for(j = 0; j < 4; j++)
@@ -205,30 +253,11 @@ int main (void)
         					printf("%x\n\r", array[j]);
         			}
         		}
+        		//printf("%d\n\r", g_Destination_ui32[0]);
 			}
 }
 
 
 
-void Delay_ms(uint32_t ms)
-{
-	uint32_t currenttick = e_Systick_ui32;
-	while((e_Systick_ui32 - currenttick) <= ms);
-}
 
-uint8_t get_buffer(uint8_t arr[])
-{
-	uint8_t k, ui8l_temp;
-	if(fifo_is_empty(e_BUFFER_ui8) == true)
-            return 0;
-    else
-    {
-    	uint8_t ui8l_temp,i;
-    	for(k = 0; k < 4; k++)
-        {
-    		fifo_get(e_BUFFER_ui8, &ui8l_temp);
-    		arr[k] = ui8l_temp;
-        }
-        return 1;
-     }
-}
+

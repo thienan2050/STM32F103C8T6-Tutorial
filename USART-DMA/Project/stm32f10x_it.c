@@ -1,11 +1,11 @@
 /**
   ******************************************************************************
-  * @file    Project/STM32F10x_StdPeriph_Template/stm32f10x_it.c 
+  * @file    Project/STM32F10x_StdPeriph_Template/stm32f10x_it.c
   * @author  MCD Application Team
   * @version V3.5.0
   * @date    08-April-2011
   * @brief   Main Interrupt Service Routines.
-  *          This file provides template for all exceptions handler and 
+  *          This file provides template for all exceptions handler and
   *          peripherals interrupt service routine.
   ******************************************************************************
   * @attention
@@ -25,6 +25,7 @@
 #include "stm32f10x_it.h"
 #include "stm32f10x_exti.h"
 #include "stm32f10x_usart.h"
+#include "stm32f10x_dma.h"
 #include "FIFO.h"
 #include "debug.h"
 /** @addtogroup STM32F10x_StdPeriph_Template
@@ -38,12 +39,25 @@
 extern __IO uint32_t e_Systick_ui32;
 extern fifo_t e_BUFFER_ui8;
 uint32_t i;
+extern uint32_t e_DMA_Flag_ui8;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
 /******************************************************************************/
 /*            Cortex-M3 Processor Exceptions Handlers                         */
 /******************************************************************************/
+void DMA1_Channel1_IRQHandler(void)
+{
+  /* Test on DMA1 Channel1 Transfer Complete interrupt */
+  if(DMA_GetITStatus(DMA1_IT_TC1))
+  {
+	  e_DMA_Flag_ui8 = 1;
+	  printf("DMA finished\n\r");
+	  /* Clear DMA1 Channel1 Half Transfer, Transfer Complete and Global interrupt pending bits */
+	  DMA_ClearITPendingBit(DMA1_IT_TC1);
+	  DMA_Cmd(DMA1_Channel1, DISABLE);
+  }
+}
 void USART3_IRQHandler(void)
 {
 	uint8_t data;
@@ -180,11 +194,6 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
 	e_Systick_ui32++;
-	//if(e_Systick_ui32 == 1000)
-	//{
-	//	e_Systick_ui32 = 0;
-		//printf("Systick interrupt [%d] \n\r", i++);
-	//}
 }
 
 /******************************************************************************/
@@ -205,7 +214,7 @@ void SysTick_Handler(void)
 
 /**
   * @}
-  */ 
+  */
 
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
