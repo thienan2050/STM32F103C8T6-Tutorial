@@ -8,7 +8,7 @@
 #include "misc.h"
 #include "core_cm3.h"
 #include "FIFO.h"
-#include "function.h"
+
 #include "debug.h"
 
 GPIO_InitTypeDef GPIO_InitStruct;
@@ -17,20 +17,21 @@ EXTI_InitTypeDef EXTI_InitStructure;
 NVIC_InitTypeDef NVIC_InitStructure;
 DMA_InitTypeDef g_DMA_InitStructure_st;
 
+fifo_t g_USART_Buffer;
 
 
-__IO uint32_t e_Systick_ui32 = 0;
-fifo_t e_BUFFER_ui8;
-uint32_t j, m;
-uint8_t array[4];
-uint32_t g_CurrentTick_ui32;
-uint32_t g_Source_ui32[800];
-uint32_t g_Destination_ui32[800];
+uint8_t g_DMA_USART_data = 0;
+uint8_t g_DMA_buffer[8];
 uint8_t e_DMA_Flag_ui8 = 0;
-
-
+uint8_t e_Counter_ui8 = 0;
+uint8_t j;
 int main (void)
 {
+			g_USART_Buffer = fifo_create(400, sizeof(uint8_t));
+			if(g_USART_Buffer == NULL)
+			{
+				printf("Cannot create buffer \n\r");
+			}
 /**
  * Configure USART2 for debugging
  * GPIO_Pin_2 TX
@@ -107,8 +108,8 @@ int main (void)
 
 			/*NVIC Configuration*/
 			NVIC_InitStructure.NVIC_IRQChannel = EXTI9_5_IRQn;
-			NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 10;
-			NVIC_InitStructure.NVIC_IRQChannelSubPriority = 10;
+			NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 5;
+			NVIC_InitStructure.NVIC_IRQChannelSubPriority = 5;
 			NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 			NVIC_Init(&NVIC_InitStructure);
 
@@ -133,8 +134,8 @@ int main (void)
 
 			/*NVIC Configuration*/
 			NVIC_InitStructure.NVIC_IRQChannel = EXTI4_IRQn;
-			NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 10;
-			NVIC_InitStructure.NVIC_IRQChannelSubPriority = 10;
+			NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 4;
+			NVIC_InitStructure.NVIC_IRQChannelSubPriority = 4;
 			NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 			NVIC_Init(&NVIC_InitStructure);
 
@@ -167,9 +168,17 @@ int main (void)
 			UART_InitStruct.USART_Mode = USART_Mode_Tx | USART_Mode_Rx;
 			UART_InitStruct.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
 			USART_Init(USART3, &UART_InitStruct);
-			/* Enable USART2 Peripheral*/
+
+			/* Enable USART3 DMA TX request */
+			USART_DMACmd(USART3, USART_DMAReq_Rx, ENABLE);
+
+			/* Enable USART3 Peripheral*/
 			USART_Cmd(USART3, ENABLE);
-			/*NVIC Configuration*/
+
+
+
+
+			/* NVIC Configuration for USART3*/
 			NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
 			NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
 			NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
@@ -178,82 +187,67 @@ int main (void)
 
 			/* Configure USART Interrupt */
 			USART_ITConfig(USART3, USART_IT_RXNE , ENABLE);
-			/* Create e_BUFFER_ui8 */
-			e_BUFFER_ui8 = fifo_create(400, sizeof(uint8_t));
-			if(e_BUFFER_ui8 == NULL)
-			{
-				printf("Cannot create e_BUFFER_ui8 \n\r");
-			}
 
 /**
 * Configure DMA
 */
-			for(m = 0; m < 800; m++)
-			{
-				g_Source_ui32[m] = m;
-			}
+
+
+
 
 			/* Enable clock for DMA1 */
 			RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);
 			/* Reset DMA1 channel */
-			DMA_DeInit(DMA1_Channel1);
-			g_DMA_InitStructure_st.DMA_PeripheralBaseAddr = (uint32_t)g_Source_ui32;
-			g_DMA_InitStructure_st.DMA_MemoryBaseAddr = (uint32_t)g_Destination_ui32;
+			DMA_DeInit(DMA1_Channel3);
+			/* USART3 Data Peripheral Register */
+			g_DMA_InitStructure_st.DMA_PeripheralBaseAddr = (uint32_t)(&(USART3->DR));
+			/* Address of array storing data */
+			g_DMA_InitStructure_st.DMA_MemoryBaseAddr = (uint32_t)g_DMA_buffer;
+			/* Peripheral to Memory direction */
 			g_DMA_InitStructure_st.DMA_DIR = DMA_DIR_PeripheralSRC;
-			g_DMA_InitStructure_st.DMA_BufferSize = 800;
-			g_DMA_InitStructure_st.DMA_PeripheralInc = DMA_PeripheralInc_Enable;
+			/* Length of array storing data */
+			g_DMA_InitStructure_st.DMA_BufferSize = 8;
+			/* Do not allow to increase Peripheral's address */
+			g_DMA_InitStructure_st.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+			/* Do increase memory address */
 			g_DMA_InitStructure_st.DMA_MemoryInc = DMA_MemoryInc_Enable;
-			g_DMA_InitStructure_st.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Word;
-			g_DMA_InitStructure_st.DMA_MemoryDataSize = DMA_MemoryDataSize_Word;
-			g_DMA_InitStructure_st.DMA_Mode = DMA_Mode_Normal;
+			/* Data size 1 byte */
+			g_DMA_InitStructure_st.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
+			/* Data size 1 byte */
+			g_DMA_InitStructure_st.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
+			/* DMA will return to head of array to next transmit */
+			g_DMA_InitStructure_st.DMA_Mode = DMA_Mode_Circular;
 			g_DMA_InitStructure_st.DMA_Priority = DMA_Priority_Medium;
 			g_DMA_InitStructure_st.DMA_M2M = DMA_M2M_Disable;
 
-			DMA1_Channel1->CNDTR
-			DMA_Init(DMA1_Channel1, &g_DMA_InitStructure_st);
-			DMA_ITConfig(DMA1_Channel1, DMA_IT_TC, ENABLE);
+			/* Configure DMA1 Channel3 */
+			DMA_Init(DMA1_Channel3, &g_DMA_InitStructure_st);
+			/* Enable DMA TC and HT interrupt */
+			DMA_ITConfig(DMA1_Channel3, DMA_IT_HT | DMA_IT_TC, ENABLE);
+			/* Enable DMA1 Channel 3 */
+			DMA_Cmd(DMA1_Channel3, ENABLE);
 
-			/* Enable DMA1 channel IRQ Channel */
-			NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel1_IRQn;
-			NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-			NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+			/* NVIC Configuration for DMA1 Channel3 */
+			NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel3_IRQn;
+			NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+			NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
 			NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 			NVIC_Init(&NVIC_InitStructure);
 
-			DMA_Cmd(DMA1_Channel1, ENABLE);
 
 
-			while(e_DMA_Flag_ui8 == 0);
-			printf("%d\n\r", g_Destination_ui32[100]);
 
 			/* Frame data ID|H_DATA|L_DATA|\n */
 			while (1)
 			{
-				/* Toggle LED on PA0 */
-				GPIOA->ODR = (uint32_t)0x00;
-				Delay_ms(1000);
-				//delay(10000);
-        		GPIOA->ODR = (uint32_t)(1<<0);
-        		Delay_ms(1000);
-        		/* Generate Software Interrupt on Line5 */
-				//EXTI->SWIER |= (uint32_t)EXTI_Line5;
-        		/* Generate Software Interrupt on Line4 */
-				//EXTI->SWIER |= (uint32_t)EXTI_Line4;
-
-        		DMA_Cmd(DMA1_Channel1, DISABLE);
-        		g_Source_ui32[100] = ++m;
-        		DMA_Cmd(DMA1_Channel1, ENABLE);
-        		if(get_buffer(array) == 1)
-        		{
-        			for(j = 0; j < 4; j++)
-        			{
-        				if(j != 3)
-        					printf("%x ", array[j]);
-        				else
-        					printf("%x\n\r", array[j]);
-        			}
-        		}
-        		//printf("%d\n\r", g_Destination_ui32[0]);
+				/* Print data to screen */
+				if(e_DMA_Flag_ui8 == 1)
+				{
+					for(j = 0; j < 8; j++)
+						printf("%x ", g_DMA_buffer[j]);
+					printf("\n\r");
+					e_DMA_Flag_ui8 = 0;
+				}
 			}
 }
 

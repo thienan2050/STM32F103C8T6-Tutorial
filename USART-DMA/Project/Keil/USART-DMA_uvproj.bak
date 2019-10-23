@@ -434,6 +434,16 @@
               <FileType>1</FileType>
               <FilePath>..\..\Lib\STM32F10x_StdPeriph_Driver\src\stm32f10x_usart.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f10x_exti.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Lib\STM32F10x_StdPeriph_Driver\src\stm32f10x_exti.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f10x_dma.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Lib\STM32F10x_StdPeriph_Driver\src\stm32f10x_dma.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -487,7 +497,12 @@
             <File>
               <FileName>function.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\function.c</FilePath>
+              <FilePath>..\function.c</FilePath>
+            </File>
+            <File>
+              <FileName>function.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\function.h</FilePath>
             </File>
           </Files>
         </Group>

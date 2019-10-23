@@ -23,11 +23,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h"
-#include "stm32f10x_exti.h"
-#include "stm32f10x_usart.h"
-#include "stm32f10x_dma.h"
-#include "FIFO.h"
-#include "debug.h"
+
 /** @addtogroup STM32F10x_StdPeriph_Template
   * @{
   */
@@ -36,27 +32,37 @@
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-extern __IO uint32_t e_Systick_ui32;
-extern fifo_t e_BUFFER_ui8;
+__IO uint32_t e_Systick_ui32;
 uint32_t i;
-extern uint32_t e_DMA_Flag_ui8;
+extern uint8_t e_DMA_Flag_ui8;
+
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
 /******************************************************************************/
 /*            Cortex-M3 Processor Exceptions Handlers                         */
 /******************************************************************************/
-void DMA1_Channel1_IRQHandler(void)
+void DMA1_Channel3_IRQHandler(void)
 {
-  /* Test on DMA1 Channel1 Transfer Complete interrupt */
-  if(DMA_GetITStatus(DMA1_IT_TC1))
+  /* Test on DMA1 Channel3 Transfer Complete interrupt */
+  if(DMA_GetITStatus(DMA1_IT_HT3) == SET)
   {
-	  e_DMA_Flag_ui8 = 1;
-	  printf("DMA finished\n\r");
 	  /* Clear DMA1 Channel1 Half Transfer, Transfer Complete and Global interrupt pending bits */
-	  DMA_ClearITPendingBit(DMA1_IT_TC1);
-	  DMA_Cmd(DMA1_Channel1, DISABLE);
+	  DMA_ClearITPendingBit(DMA1_IT_HT3);
+	  e_DMA_Flag_ui8 = 1;
+	  printf("Half transmit\n\r");
+	  /* Generate Software Interrupt on Line5 */
+	  EXTI->SWIER |= (uint32_t)EXTI_Line5;
   }
+	if(DMA_GetITStatus(DMA1_IT_TC3) == SET)
+	{
+	  /* Clear DMA1 Channel1 Half Transfer, Transfer Complete and Global interrupt pending bits */
+	  DMA_ClearITPendingBit(DMA1_IT_TC3);
+	  e_DMA_Flag_ui8 = 1;
+	  printf("Transmit Completely\n\r");
+	  /* Generate Software Interrupt on Line4 */
+	  EXTI->SWIER |= (uint32_t)EXTI_Line4;
+	}
 }
 void USART3_IRQHandler(void)
 {
@@ -65,10 +71,9 @@ void USART3_IRQHandler(void)
 	{
 		/* Clear the UASRT Interrupt pending bit */
 		USART_ClearFlag(USART3, USART_IT_RXNE);
-		data = (uint8_t)USART_ReceiveData(USART3);
 		/* Echo data */
-		//USART_SendData(USART3, data);
-		fifo_add(e_BUFFER_ui8, &data);
+		USART_SendData(USART3, (uint8_t)USART_ReceiveData(USART3));
+
 	}
 }
 
